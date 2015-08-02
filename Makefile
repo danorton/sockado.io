@@ -5,11 +5,12 @@ PY_ALL := $(wildcard *.py tests/*.py)
 
 all: test
 
-lint: flake8-made travis-lint-made $(PY_ALL)
+lint: flake8-made $(PY_ALL)
 flake8-made:
 	flake8 .
 	touch $@
 
+lint-local: lint travis-lint-made
 travis-lint-made: .travis.yml
 	travis-lint $<
 	touch $@
