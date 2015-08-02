@@ -1,16 +1,23 @@
 
+PY_ALL := $(wildcard *.py tests/*.py)
 
-.PHONY: all test lint
+.PHONY: all test lint travis-lint
 
 all: test
 
-lint: flake8-made
+lint: flake8-made travis-lint-made $(PY_ALL)
 flake8-made:
 	flake8 .
-	touch flake8-made
+	touch $@
 
-test: lint
+travis-lint-made: .travis.yml
+	travis-lint $<
+	touch $@
+
+test: test-made
+test-made: flake8-made travis-lint-made $(PY_ALL)
 	py.test
+	touch $@
 
 clean:
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -print -delete
