@@ -1,14 +1,15 @@
 
 PY_ALL := $(wildcard *.py tests/*.py)
 
-.PHONY: all test lint
+.PHONY: all local local-lint test lint
 
-all: test
-local: travis-lint-made all
+all: local
+local: local-lint
+local-lint: travis-lint-made lint
 
-lint: flake8-made $(PY_ALL)
-flake8-made:
-	flake8 .
+lint: flake8-made
+flake8-made: $(PY_ALL)
+	flake8 $(PY_ALL)
 	touch $@
 
 lint-local: lint travis-lint-made
@@ -17,7 +18,7 @@ travis-lint-made: .travis.yml
 	touch $@
 
 test: test-made
-test-made: flake8-made $(PY_ALL)
+test-made: flake8-made $(PY_ALL) Makefile
 	py.test
 	touch $@
 

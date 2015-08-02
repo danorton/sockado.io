@@ -1,4 +1,12 @@
 
+def setup():
+    print 'setting up %s' % (__file__)
+
+
+def teardown():
+    print 'tearing down %s' % (__file__)
+
+
 def setup_function(fun):
     print 'setting up %s' % (fun.__name__)
     """ setup any state tied to the execution of the given function.
