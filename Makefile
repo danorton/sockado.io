@@ -1,7 +1,7 @@
 
-PY_ALL := $(wildcard *.py tests/*.py)
+PY_ALL = $(shell find . -name '*.py')
 
-.PHONY: all local lint-local test lint install
+.PHONY: all local lint-local test lint install uninstall
 
 all: local
 local: lint-local install
@@ -9,7 +9,7 @@ lint-local: travis-lint-made lint
 
 lint: flake8-made
 flake8-made: $(PY_ALL)
-	flake8 $(PY_ALL)
+	flake8 --config=./flake8.ini $(PY_ALL)
 	touch $@
 
 lint-local: lint travis-lint-made
@@ -23,10 +23,17 @@ test-made: flake8-made $(PY_ALL) Makefile
 	touch $@
 
 install: install-made
-install-made: Makefile setup.py requirements.txt
+install-made: lint Makefile setup.py requirements.txt
 	pip install .
 	pip install -r requirements.txt
 	touch $@
+
+uninstall: lint
+	rm -f install-made
+	-pip uninstall -y sockado_io
+
+reinstall: uninstall
+	pip install .
 
 clean:
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -print -delete
