@@ -1,10 +1,10 @@
 
-PY_ALL = $(shell find . -name '*.py')
+PY_ALL := $(shell find . -name '*.py') bin/run_server
 
 .PHONY: all local lint-local test lint install uninstall
 
-all: local
-local: lint-local install
+all: lint-local
+local: lint-local
 lint-local: travis-lint-made lint
 
 lint: flake8-made

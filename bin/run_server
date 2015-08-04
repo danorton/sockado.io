@@ -17,7 +17,7 @@ def main(argv):
     LOGGER.info('Hello, world!')
     server = SockadoServer(
         logger=LOGGER,
-        bind_port=80,
+        bind_port=8888,
     )
     server.start()
 
